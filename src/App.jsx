@@ -3,6 +3,11 @@ import DestinationForm from './components/DestinationForm.jsx'
 import DestinationCard from './components/DestinationCard.jsx'
 import './App.css'
 
+// Turns 3 into "03" for the small editorial counters
+function twoDigits(number) {
+  return String(number).padStart(2, '0')
+}
+
 function App() {
   // useState: the list of destination records. It starts empty (no destinations).
   const [destinations, setDestinations] = useState([])
@@ -21,93 +26,114 @@ function App() {
     setDestinations(destinations.filter((destination) => destination.id !== idToDelete))
   }
 
+  const count = destinations.length
+  const countLabel = `${twoDigits(count)} ${count === 1 ? 'destination' : 'destinations'}`
+
   return (
     <div className="app">
-      <header className="navbar">
-        <div className="navbar-inner">
+      {/* Landscape photograph with a forest-green overlay (decorative background) */}
+      <div className="scenery" aria-hidden="true" />
+
+      {/* ---------- Navigation ---------- */}
+      <header className="nav">
+        <div className="container nav-inner">
           <div className="brand">
-            <span className="brand-logo" aria-hidden="true">
-              <PinIcon />
-            </span>
-            <span className="brand-name">Wanderlust Travels</span>
+            <BrandMark />
+            <span className="brand-word">Wanderlust</span>
+            <span className="nav-divider" aria-hidden="true" />
+            <span className="brand-sub">Destination Studio</span>
           </div>
-          <span className="navbar-tag">Travel Agency Dashboard</span>
+          <p className="nav-count" aria-live="polite">{countLabel}</p>
         </div>
       </header>
 
-      <main className="container">
-        <section className="hero">
-          <p className="hero-eyebrow">Destination Manager</p>
-          <h1>Tourist Place Information System</h1>
-          <p className="hero-description">
-            Maintain information about the tourist destinations offered by the agency.
-            Add new places with their city and entry fee, and remove the ones you no longer offer.
-          </p>
-        </section>
+      {/* ---------- Editorial hero ---------- */}
+      <section className="hero container" aria-labelledby="hero-title">
+        <div className="hero-main">
+          <p className="eyebrow">Destination Studio / Travel Collection</p>
+          <h1 id="hero-title" className="hero-title">
+            A world of places,
+            <br />
+            <em>waiting to be discovered.</em>
+          </h1>
+        </div>
+        <p className="hero-text">
+          A thoughtfully curated collection of destinations, places and experiences.
+        </p>
+      </section>
 
-        <div className="layout">
+      {/* ---------- Workspace: form (left) + collection (right) ---------- */}
+      <main className="workspace container">
+        <section className="panel panel-form" aria-labelledby="form-heading">
+          <div className="panel-head">
+            <p className="panel-label">01 — New entry</p>
+            <h2 id="form-heading" className="panel-title">Add a destination</h2>
+          </div>
           {/* Props: we pass the add handler function down to the form */}
           <DestinationForm onAddDestination={handleAddDestination} />
+        </section>
 
-          <section className="destinations-panel" aria-labelledby="destinations-heading">
-            <div className="panel-header">
-              <h2 id="destinations-heading">All Destinations</h2>
-              <span className="count-badge">
-                {destinations.length} {destinations.length === 1 ? 'place' : 'places'}
-              </span>
+        <section className="panel panel-collection" aria-labelledby="collection-heading">
+          <div className="panel-head panel-head-row">
+            <div>
+              <p className="panel-label">02 — Collection</p>
+              <h2 id="collection-heading" className="panel-title">Your destinations</h2>
             </div>
+            <span className="count-badge">{countLabel}</span>
+          </div>
 
-            {/* Conditional rendering: show the empty state OR the grid of cards */}
-            {destinations.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon" aria-hidden="true">
-                  <CompassIcon />
-                </div>
-                <h3>No destinations available</h3>
-                <p>Use the form to add your first tourist destination.</p>
-              </div>
-            ) : (
-              <div className="card-grid">
-                {/* map(): turn each destination object into a DestinationCard.
-                    The "key" prop helps React track each card in the list. */}
-                {destinations.map((destination) => (
-                  <DestinationCard
-                    key={destination.id}
-                    id={destination.id}
-                    placeName={destination.placeName}
-                    cityName={destination.cityName}
-                    entryFee={destination.entryFee}
-                    onDelete={handleDeleteDestination}
-                  />
-                ))}
-              </div>
-            )}
-          </section>
-        </div>
+          {/* Conditional rendering: show the empty state OR the list of cards */}
+          {destinations.length === 0 ? (
+            <div className="empty-state">
+              <RouteMark />
+              <h3 className="empty-title">No destinations yet.</h3>
+              <p className="empty-text">Add a place to begin building your collection.</p>
+            </div>
+          ) : (
+            <div className="card-list">
+              {/* map(): turn each destination object into a DestinationCard.
+                  The "key" prop helps React track each card in the list. */}
+              {destinations.map((destination, index) => (
+                <DestinationCard
+                  key={destination.id}
+                  id={destination.id}
+                  number={index + 1}
+                  placeName={destination.placeName}
+                  cityName={destination.cityName}
+                  entryFee={destination.entryFee}
+                  onDelete={handleDeleteDestination}
+                />
+              ))}
+            </div>
+          )}
+        </section>
       </main>
 
-      <footer className="footer">
-        Tourist Place Information System · React JS Case Study
+      <footer className="footer container">
+        <span>Wanderlust — Destination Studio</span>
+        <span>Tourist Place Information System · React JS</span>
       </footer>
     </div>
   )
 }
 
-// Small inline SVG icons (no external icon library needed)
-function PinIcon() {
+// Small location-inspired symbol for the wordmark (inline SVG, no icon library)
+function BrandMark() {
   return (
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" />
-      <circle cx="12" cy="9.5" r="2.5" />
+    <svg className="brand-mark" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+      <path d="M10 1.5 17 10l-7 8.5L3 10Z" fill="none" stroke="currentColor" strokeWidth="1.1" />
+      <circle cx="10" cy="10" r="1.8" fill="currentColor" />
     </svg>
   )
 }
 
-function CompassIcon() {
+// Restrained detail for the empty state: a short dotted route ending in a point
+function RouteMark() {
   return (
-    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" />
+    <svg className="route-mark" viewBox="0 0 120 24" aria-hidden="true">
+      <circle cx="6" cy="16" r="3" fill="none" stroke="currentColor" strokeWidth="1" />
+      <path d="M12 15 C 40 4, 70 26, 104 10" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="1.5 4.5" strokeLinecap="round" />
+      <circle cx="112" cy="8" r="2.5" fill="currentColor" />
     </svg>
   )
 }

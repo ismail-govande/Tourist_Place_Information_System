@@ -1,28 +1,49 @@
-/* Global styles and design tokens (colors, radius, shadows) */
+/* ==========================================================
+   Global styles and design tokens — Wanderlust Destination Studio
+   ========================================================== */
 :root {
-  --color-primary: #0f766e;        /* deep teal - main brand color */
-  --color-primary-dark: #115e59;
-  --color-primary-soft: #e6f4f1;
-  --color-accent: #f59e0b;         /* warm sand / sunset accent */
-  --color-danger: #dc2626;
-  --color-danger-soft: #fef2f2;
+  /* Brand palette */
+  --forest: #102d29;     /* Deep Forest */
+  --emerald: #174e46;    /* Emerald */
+  --ivory: #f7f5ef;      /* Warm Ivory */
+  --linen: #e8e2d5;      /* Linen */
+  --sage: #a9b9a8;       /* Muted Sage */
+  --brass: #c69b65;      /* Antique Brass */
+  --charcoal: #202b29;   /* Charcoal */
 
-  --color-bg: #f7f5f0;             /* warm off-white background */
-  --color-surface: #ffffff;
-  --color-border: #e7e2d8;
-  --color-text: #1c2b2a;
-  --color-muted: #6b7a78;
+  /* Derived tones (for readable text on each surface) */
+  --brass-deep: #87602f;          /* brass on light surfaces (4.9:1 on ivory) */
+  --ink-muted: #5a6562;           /* secondary text on light surfaces */
+  --paper: #fcfbf7;               /* card surface */
+  --hairline: rgba(32, 43, 41, 0.13);
+  --hairline-strong: rgba(32, 43, 41, 0.24);
+  --danger: #9b3b2b;              /* restrained terracotta for Delete / errors */
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  /* Type: two families, a short scale, regular and medium weights only */
+  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-label: 0.6875rem;   /* 11px uppercase labels */
+  --fs-small: 0.8125rem;   /* 13px */
+  --fs-body: 0.9375rem;    /* 15px */
+  --fs-input: 1rem;        /* 16px — also avoids iOS zoom on focus */
+  --fs-title: 1.5rem;      /* 24px section titles */
+  --tracking-label: 0.16em;
 
-  --shadow-sm: 0 1px 2px rgba(28, 43, 42, 0.06);
-  --shadow-md: 0 8px 24px rgba(28, 43, 42, 0.08);
+  /* Layout */
+  --content-width: 1160px;
+  --gutter: 40px;
 
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: var(--color-text);
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 160ms;
+  --medium: 260ms;
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--charcoal);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 *,
@@ -31,10 +52,15 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  background-color: var(--forest);
+}
+
 body {
   margin: 0;
   min-width: 320px;
-  background: var(--color-bg);
+  overflow-x: hidden;
 }
 
 h1,
@@ -47,4 +73,10 @@ p {
 button,
 input {
   font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--brass);
+  color: var(--forest);
 }

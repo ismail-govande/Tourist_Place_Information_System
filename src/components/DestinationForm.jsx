@@ -59,13 +59,10 @@ function DestinationForm({ onAddDestination }) {
   }
 
   return (
-    <section className="form-card" aria-labelledby="form-heading">
-      <h2 id="form-heading">Add Destination</h2>
-      <p className="form-subtitle">Enter the details of a new tourist place.</p>
-
+    <div className="form-card">
       {/* noValidate: we show our own validation messages instead of the browser's */}
       <form onSubmit={handleSubmit} noValidate>
-        <div className="form-field">
+        <div className={`form-field ${errors.placeName ? 'has-error' : ''}`}>
           <label htmlFor="placeName">Place Name</label>
           <input
             id="placeName"
@@ -73,12 +70,13 @@ function DestinationForm({ onAddDestination }) {
             placeholder="e.g. Gateway of India"
             value={placeName}
             onChange={(event) => setPlaceName(event.target.value)}
-            className={errors.placeName ? 'input-error' : ''}
+            aria-invalid={errors.placeName ? 'true' : 'false'}
+            aria-describedby={errors.placeName ? 'placeName-error' : undefined}
           />
-          {errors.placeName && <p className="error-text">{errors.placeName}</p>}
+          {errors.placeName && <p id="placeName-error" className="error-text">{errors.placeName}</p>}
         </div>
 
-        <div className="form-field">
+        <div className={`form-field ${errors.cityName ? 'has-error' : ''}`}>
           <label htmlFor="cityName">City Name</label>
           <input
             id="cityName"
@@ -86,31 +84,40 @@ function DestinationForm({ onAddDestination }) {
             placeholder="e.g. Mumbai"
             value={cityName}
             onChange={(event) => setCityName(event.target.value)}
-            className={errors.cityName ? 'input-error' : ''}
+            aria-invalid={errors.cityName ? 'true' : 'false'}
+            aria-describedby={errors.cityName ? 'cityName-error' : undefined}
           />
-          {errors.cityName && <p className="error-text">{errors.cityName}</p>}
+          {errors.cityName && <p id="cityName-error" className="error-text">{errors.cityName}</p>}
         </div>
 
-        <div className="form-field">
+        <div className={`form-field ${errors.entryFee ? 'has-error' : ''}`}>
           <label htmlFor="entryFee">Entry Fee (₹)</label>
-          <input
-            id="entryFee"
-            type="number"
-            min="0"
-            step="any"
-            placeholder="e.g. 50"
-            value={entryFee}
-            onChange={(event) => setEntryFee(event.target.value)}
-            className={errors.entryFee ? 'input-error' : ''}
-          />
-          {errors.entryFee && <p className="error-text">{errors.entryFee}</p>}
+          <div className="fee-input">
+            <span className="fee-prefix" aria-hidden="true">₹</span>
+            <input
+              id="entryFee"
+              type="number"
+              min="0"
+              step="any"
+              inputMode="decimal"
+              placeholder="e.g. 50"
+              value={entryFee}
+              onChange={(event) => setEntryFee(event.target.value)}
+              aria-invalid={errors.entryFee ? 'true' : 'false'}
+              aria-describedby={errors.entryFee ? 'entryFee-error' : undefined}
+            />
+          </div>
+          {errors.entryFee && <p id="entryFee-error" className="error-text">{errors.entryFee}</p>}
         </div>
 
         <button type="submit" className="btn-primary">
-          Add Destination
+          <span>Add Destination</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </button>
       </form>
-    </section>
+    </div>
   )
 }
 
