@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import DestinationForm from './components/DestinationForm.jsx'
 import DestinationCard from './components/DestinationCard.jsx'
+import HeroBackground from './components/HeroBackground.jsx'
 import './App.css'
 
 // Turns 3 into "03" for the small editorial counters
@@ -31,36 +32,38 @@ function App() {
 
   return (
     <div className="app">
-      {/* Landscape photograph with a forest-green overlay (decorative background) */}
-      <div className="scenery" aria-hidden="true" />
+      {/* ---------- Hero stage: background video + navigation + hero text ---------- */}
+      <div className="hero-stage">
+        <HeroBackground />
 
-      {/* ---------- Navigation ---------- */}
-      <header className="nav">
-        <div className="container nav-inner">
-          <div className="brand">
-            <BrandMark />
-            <span className="brand-word">Wanderlust</span>
-            <span className="nav-divider" aria-hidden="true" />
-            <span className="brand-sub">Destination Studio</span>
+        {/* ---------- Navigation ---------- */}
+        <header className="nav">
+          <div className="container nav-inner">
+            <div className="brand">
+              <BrandMark />
+              <span className="brand-word">Wanderlust</span>
+              <span className="nav-divider" aria-hidden="true" />
+              <span className="brand-sub">Destination Studio</span>
+            </div>
+            <p className="nav-count" aria-live="polite">{countLabel}</p>
           </div>
-          <p className="nav-count" aria-live="polite">{countLabel}</p>
-        </div>
-      </header>
+        </header>
 
-      {/* ---------- Editorial hero ---------- */}
-      <section className="hero container" aria-labelledby="hero-title">
-        <div className="hero-main">
-          <p className="eyebrow">Destination Studio / Travel Collection</p>
-          <h1 id="hero-title" className="hero-title">
-            A world of places,
-            <br />
-            <em>waiting to be discovered.</em>
-          </h1>
-        </div>
-        <p className="hero-text">
-          A thoughtfully curated collection of destinations, places and experiences.
-        </p>
-      </section>
+        {/* ---------- Editorial hero ---------- */}
+        <section className="hero container" aria-labelledby="hero-title">
+          <div className="hero-main">
+            <p className="eyebrow">Destination Studio / Travel Collection</p>
+            <h1 id="hero-title" className="hero-title">
+              A world of places,
+              <br />
+              <em>waiting to be discovered.</em>
+            </h1>
+          </div>
+          <p className="hero-text">
+            A thoughtfully curated collection of destinations, places and experiences.
+          </p>
+        </section>
+      </div>
 
       {/* ---------- Workspace: form (left) + collection (right) ---------- */}
       <main className="workspace container">

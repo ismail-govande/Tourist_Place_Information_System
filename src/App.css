@@ -20,28 +20,49 @@
   padding-right: var(--gutter);
 }
 
-/* ---------- Background: the landscape photograph ---------- */
-.scenery {
+/* ---------- Hero stage: video background + navigation + hero text ---------- */
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(600px, 84vh, 940px);
+  overflow: hidden;
+}
+
+/* Media layer. The static photo is the fallback: it shows before the video
+   loads, when video is unavailable, and for reduced-motion users. */
+.hero-media {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0;
   z-index: -1;
-  height: clamp(680px, 100vh, 920px);
-  background-color: var(--forest);
-  background-image:
+  pointer-events: none;
+  background: var(--forest) url('/assets/wanderlust-landscape.webp') center 42% / cover no-repeat;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 46%;
+  pointer-events: none;
+}
+
+/* Overlays: readable text, preserved golden light, soft blend into the page */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
     /* darker band behind the navigation */
-    linear-gradient(180deg, rgba(16, 45, 41, 0.55) 0%, rgba(16, 45, 41, 0) 16%),
-    /* left-side shade so the hero text stays readable; the warm sky on the right stays open */
-    linear-gradient(90deg, rgba(16, 45, 41, 0.6) 0%, rgba(16, 45, 41, 0.26) 42%, rgba(16, 45, 41, 0) 72%),
-    /* fade into deep forest where the workspace sits */
-    linear-gradient(180deg, rgba(16, 45, 41, 0) 52%, rgba(16, 45, 41, 0.62) 78%, var(--forest) 100%),
-    /* light green tint so the photo sits inside the palette */
-    linear-gradient(rgba(16, 45, 41, 0.08), rgba(16, 45, 41, 0.08)),
-    url('/assets/wanderlust-landscape.webp');
-  background-size: cover;
-  background-position: center 42%;
-  background-repeat: no-repeat;
+    linear-gradient(180deg, rgba(16, 45, 41, 0.55) 0%, rgba(16, 45, 41, 0) 18%),
+    /* left-side shade behind the text; the warm sky on the right stays open */
+    linear-gradient(90deg, rgba(16, 45, 41, 0.62) 0%, rgba(16, 45, 41, 0.28) 42%, rgba(16, 45, 41, 0) 72%),
+    /* soft fade into deep forest where the workspace begins */
+    linear-gradient(180deg, rgba(16, 45, 41, 0) 58%, rgba(16, 45, 41, 0.6) 82%, var(--forest) 100%),
+    /* light green tint so the footage sits inside the palette */
+    linear-gradient(rgba(16, 45, 41, 0.08), rgba(16, 45, 41, 0.08));
 }
 
 /* ---------- Navigation ---------- */
@@ -107,8 +128,10 @@
   grid-template-columns: 7fr 5fr;
   align-items: end;
   column-gap: 48px;
-  padding-top: clamp(72px, 12vh, 128px);
-  padding-bottom: clamp(72px, 15vh, 150px);
+  flex: 1;
+  align-content: center;
+  padding-top: 48px;
+  padding-bottom: 152px; /* room for the workspace that overlaps the hero's lower edge */
   color: var(--ivory);
   animation: rise 700ms var(--ease-out) both;
 }
@@ -154,6 +177,8 @@
   grid-template-columns: 5fr 7fr;
   gap: 24px;
   align-items: start;
+  position: relative;
+  margin-top: -96px;
   animation: rise 700ms var(--ease-out) 140ms both;
 }
 
@@ -540,6 +565,10 @@
 
 /* Reduced motion: near-instant (1ms keeps onAnimationEnd firing, so Delete still works) */
 @media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+
   *,
   *::before,
   *::after {
@@ -568,9 +597,12 @@
 
 /* ---------- Tablet: stack form above the collection ---------- */
 @media (max-width: 880px) {
-  .scenery {
-    height: 720px;
-    background-position: 35% center;
+  .hero-stage {
+    min-height: clamp(560px, 78vh, 820px);
+  }
+
+  .hero-video {
+    object-position: 56% 50%;
   }
 
   .workspace {
@@ -600,14 +632,31 @@
     --gutter: 16px;
   }
 
-  .scenery {
-    height: 640px;
-    background-position: 28% center;
-    background-image:
-      linear-gradient(180deg, rgba(16, 45, 41, 0.62) 0%, rgba(16, 45, 41, 0.2) 34%, rgba(16, 45, 41, 0.15) 50%),
-      linear-gradient(180deg, rgba(16, 45, 41, 0) 52%, rgba(16, 45, 41, 0.7) 80%, var(--forest) 100%),
-      linear-gradient(rgba(16, 45, 41, 0.12), rgba(16, 45, 41, 0.12)),
-      url('/assets/wanderlust-landscape.webp');
+  .hero-stage {
+    min-height: clamp(540px, 82svh, 720px);
+  }
+
+  /* Keep the river and valley in frame on a tall, narrow screen */
+  .hero-video {
+    object-position: 63% 50%;
+  }
+
+  .hero-media {
+    background-position: 63% center;
+  }
+
+  .hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(16, 45, 41, 0.62) 0%, rgba(16, 45, 41, 0.3) 30%, rgba(16, 45, 41, 0.22) 55%, rgba(16, 45, 41, 0.7) 82%, var(--forest) 100%);
+  }
+
+  .hero {
+    padding-top: 40px;
+    padding-bottom: 120px;
+  }
+
+  .workspace {
+    margin-top: -72px;
   }
 
   .panel-head-row {
@@ -626,8 +675,6 @@
   }
 
   .hero {
-    padding-top: 56px;
-    padding-bottom: 44px;
     row-gap: 24px;
   }
 
